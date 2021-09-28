@@ -2,12 +2,11 @@ package srt
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
-const TimestampFormat = "15:04:05,000"
-
-const TimestampSeparator = "-->"
+const timestampFormat = "15:04:05,000"
 
 type Subtitle struct {
 	Position  int       `json:"position"`
@@ -21,6 +20,15 @@ func (s *Subtitle) AddDuration(duration time.Duration) {
 	s.End = s.End.Add(duration)
 }
 
-func (s *Subtitle) write() string {
-	return fmt.Sprintf("%d", s.Position)
+func (s *Subtitle) ToSRT() string {
+	return fmt.Sprintf(`%d
+%s --> %s
+%s
+
+`,
+		s.Position,
+		s.Start.Format(timestampFormat),
+		s.End.Format(timestampFormat),
+		strings.Join(s.TextLines, "\n"),
+	)
 }

@@ -38,12 +38,12 @@ that are not properly synced with video.
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		durationStr, err := cmd.Flags().GetString("duration")
-		if err != nil {
+		if err != nil || durationStr == "" {
 			return fmt.Errorf("could not get --duration argument: %s", err)
 		}
 
 		outputFile, err := cmd.Flags().GetString("output")
-		if err != nil {
+		if err != nil || outputFile == "" {
 			return fmt.Errorf("could not get --output argument: %s", err)
 		}
 
